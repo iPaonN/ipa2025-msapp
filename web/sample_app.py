@@ -1,0 +1,44 @@
+# Add to this file for the sample app lab
+from flask import Flask
+from flask import request
+from flask import render_template
+from flask import redirect
+from flask import url_for
+
+from pymongo import MongoClient
+from bson import ObjectId
+
+sample = Flask(__name__)
+
+data = []
+
+client = MongoClient("mongodb://mongo:27017/")
+mydb = client["mydatabase"]
+mycollection = mydb["myrouter"]
+
+@sample.route("/")
+def main():
+    data = list(mycollection.find())
+    return render_template("index.html", data=data)
+
+@sample.route("/add", methods=["POST"])
+def add_router():
+    yourname = request.form.get("yourname")
+    password = request.form.get("password")
+    yourip = request.form.get("yourip")
+
+    if yourname and password and yourip:
+        data.append({"yourip": yourip,"yourname": yourname, "password": password})
+        mycollection.insert_one({"yourip": yourip,"yourname": yourname, "password": password})
+    return redirect("/")
+
+@sample.route("/delete/<idx>", methods=["POST"])
+def delete_router(idx):
+    try:
+        mycollection.delete_one({"_id": ObjectId(idx)})
+    except Exception:
+        pass
+    return redirect(url_for("main"))
+
+if __name__ == "__main__":
+    sample.run(host="0.0.0.0", port=8080)
