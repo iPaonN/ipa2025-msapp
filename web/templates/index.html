@@ -7,16 +7,16 @@
     <h1>You are calling me from {{request.remote_addr}}</h1>
     <h2>Guestbook</h2>
     <form method="POST" action="/add">
-    <input name="yourip" placeholder="Yourip" required />
-    <input name="yourname" placeholder="Yourname" required />
-    <input name="password" placeholder="password" required />
+    <input name="yourip" placeholder="Your IP address" required />
+    <input name="yourname" placeholder="Your name" required />
+    <input name="password" placeholder="Your Password" required />
     <button type="submit">Add</button>
   </form>
 
   <ul>
     {% for each in data %}
       <li>
-	       {{ each.yourip }} - {{ each.yourname }} - {{ each.password }}
+	       {{ each.yourip }} - {{ each.yourname }}
             <form method="POST" action="{{ url_for('delete_router', idx=each._id) }}" style="display:inline">
                 <button type="submit">Delete</button>
             </form>
