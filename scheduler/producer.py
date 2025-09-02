@@ -1,7 +1,15 @@
 import pika
+import os
 
-def product(host, body):
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host))
+def produce(host, body):
+
+    rabbitmq_user = os.environ.get("RABBITMQ_DEFAULT_USER")
+    rabbitmq_pass = os.environ.get("RABBITMQ_DEFAULT_PASS")
+
+    credentials = pika.PlainCredentials(rabbitmq_user, rabbitmq_pass)
+    parameters = pika.ConnectionParameters(host, credentials=credentials)
+    connection = pika.BlockingConnection(parameters)
+
     channel = connection.channel()
 
     channel.exchange_declare(exchange="jobs", exchange_type="direct")
@@ -13,4 +21,6 @@ def product(host, body):
     connection.close()
 
 if __name__ == "__main__":
-    product("localhost", "192.168.1.44")
+    host = os.environ.get("RABBITMQ_HOST", "rabbitmq")
+    produce(host, "192.168.1.44")
+

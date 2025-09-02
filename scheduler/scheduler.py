@@ -1,6 +1,9 @@
 import time, pika
 
-from producer import product
+from producer import produce
+
+from bson import json_util
+from database import get_router_info
 
 def scheduler():
 
@@ -16,7 +19,11 @@ def scheduler():
         print(f"[{now_str_with_ms}] scheduler is running... {count}")
 
         try:
-            product("localhost", "192.168.1.44")
+            for data in get_router_info():
+                print("Data:", data)
+                body_bytes = json_util.dumps(data).encode("utf-8")
+                print("Body bytes:", body_bytes)
+                produce("rabbitmq", body_bytes)
         except Exception as e:
             print(e)
             time.sleep(3)
