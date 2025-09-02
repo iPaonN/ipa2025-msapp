@@ -67,5 +67,6 @@ def router_detail(ip):
                            router_ip=ip,
                            interface_data=docs)
 
+
 if __name__ == "__main__":
     sample.run(host="0.0.0.0", port=8080)
