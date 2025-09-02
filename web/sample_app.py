@@ -8,12 +8,17 @@ from flask import url_for
 from pymongo import MongoClient
 from bson import ObjectId
 
+import os
+
 sample = Flask(__name__)
+
+mongo_url = os.environ.get("MONGO_URI")
+db_name = os.environ.get("DB_NAME")
 
 data = []
 
-client = MongoClient("mongodb://mongo:27017/")
-mydb = client["mydatabase"]
+client = MongoClient(mongo_url)
+mydb = client[db_name]
 mycollection = mydb["myrouter"]
 
 @sample.route("/")
