@@ -42,10 +42,10 @@ jobs:
 
     - name: Build & Push Docker Images
       run: |
-        docker build -t ypao/worker:latest ./worker
-        docker build -t ypao/scheduler:latest ./scheduler
-        docker build -t ypao/web:latest ./web
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/worker:latest ./worker
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/scheduler:latest ./scheduler
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/web:latest ./web
 
-        docker push ypao/worker:latest
-        docker push ypao/scheduler:latest
-        docker push ypao/web:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/worker:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/scheduler:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/web:latest
