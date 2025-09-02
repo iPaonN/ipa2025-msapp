@@ -35,7 +35,9 @@ def add_router():
     yourip = request.form.get("yourip")
 
     if yourname and password and yourip:
-        data.append({"yourip": yourip, "yourname": yourname, "password": password})
+        data.append(
+            {"yourip": yourip, "yourname": yourname, "password": password}
+        )
         mycollection.insert_one(
             {"yourip": yourip, "yourname": yourname, "password": password}
         )
@@ -56,8 +58,14 @@ interface_status = mydb["interface_status"]
 
 @sample.route("/router/<ip>", methods=["GET"])
 def router_detail(ip):
-    docs = mydb.interface_status.find({"router_ip": ip}).sort("timestamp", -1).limit(3)
-    return render_template("router_detail.html", router_ip=ip, interface_data=docs)
+    docs = (
+        mydb.interface_status.find({"router_ip": ip})
+        .sort("timestamp", -1)
+        .limit(3)
+    )
+    return render_template(
+        "router_detail.html", router_ip=ip, interface_data=docs
+    )
 
 
 if __name__ == "__main__":
