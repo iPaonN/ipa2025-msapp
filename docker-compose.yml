@@ -1,6 +1,20 @@
 services:
+  web:
+    build: ./web
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo
+    networks:
+      - app-net
+    env_file:
+      - .env
+    environment:
+      MONGO_URI: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/"
+      DB_NAME: "mydatabase"
+
   mongo:
-    image: mongo:4.4
+    image: mongo:6
     ports:
       - "27017:27017"
     volumes:
@@ -9,6 +23,7 @@ services:
       - app-net
     env_file:
       - .env
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -18,6 +33,38 @@ services:
       - app-net
     env_file:
       - .env
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+
+  scheduler:
+    build: ./scheduler
+    depends_on:
+      - mongo
+      - rabbitmq
+    networks:
+      - app-net
+    env_file:
+      - .env
+    environment:
+      MONGO_URI: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/"
+      DB_NAME: "mydatabase"
+  
+  worker:
+    build: ./worker
+    depends_on:
+      - mongo
+      - rabbitmq
+      - scheduler
+    networks:
+      - app-net
+    env_file:
+      - .env
+    environment:
+      MONGO_URI: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/"
+      DB_NAME: "mydatabase"
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
 
 volumes:
   mongo-data:
