@@ -4,6 +4,7 @@ from producer import produce
 
 from bson import json_util
 from database import get_router_info
+import os
 
 
 def scheduler():
@@ -11,6 +12,7 @@ def scheduler():
     INTERVAL = 300.0
     next_run = time.monotonic()
     count = 0
+    host = os.getenv("RABBITMQ_HOST")
 
     while True:
         now = time.time()

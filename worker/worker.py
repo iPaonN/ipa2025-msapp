@@ -1,8 +1,8 @@
 from consumer import consume
-
+from os
 
 def worker():
-    consume("rabbitmq")
+    consume(os.getenv("RABBITMQ_HOST"))
 
 
 if __name__ == "__main__":
