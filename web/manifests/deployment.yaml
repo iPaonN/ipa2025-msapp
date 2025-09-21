@@ -17,7 +17,7 @@ spec:
         - name: ipa2025-msapp-web
           image: ypao/web:latest
           ports:
-            - containerPort: 8080
+            - containerPort: 8081
           envFrom:
             - secretRef:
-                name: "ipa2025-test" # ชื่อ secret ให้ตรงกับที่เราสร้าง secret ใน rancher
+                name: "test-ipa-s" # ชื่อ secret ให้ตรงกับที่เราสร้าง secret ใน rancher

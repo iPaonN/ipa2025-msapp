@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: ipa2025-msapp-web
-  namespace: argocd
+  namespace: devops-tools 
 spec:
   project: ipa2025
   source:
