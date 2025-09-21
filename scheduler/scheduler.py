@@ -26,7 +26,7 @@ def scheduler():
                 print("Data:", data)
                 body_bytes = json_util.dumps(data).encode("utf-8")
                 print("Body bytes:", body_bytes)
-                produce("rabbitmq", body_bytes)
+                produce(host, body_bytes)
         except Exception as e:
             print(e)
             time.sleep(3)
